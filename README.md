@@ -7,11 +7,11 @@ Based on the paper A Symbolic Representation of Time Series, with Implications f
 ************
 *General use:*
 --------------
-'''
+```
 from saxpy import SAX
 
 s = SAX(wordSize, alphabetSize, epsilon)
-'''
+```
 You can optionally specify word size, alphabet size and epsilon
 
 If you want to compare x1 and x2 (lists of values):
