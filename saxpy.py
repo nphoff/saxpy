@@ -47,6 +47,7 @@ class SAX(object):
                             }
         self.beta = self.breakpoints[str(self.alphabetSize)]
         self.build_letter_compare_dict()
+        self.scalingFactor = 1
 
 
     def to_letter_rep(self, x):
@@ -54,6 +55,7 @@ class SAX(object):
         Function takes a series of data, x, and transforms it to a string representation
         """
         (paaX, indices) = self.to_PAA(self.normalize(x))
+        self.scalingFactor = np.sqrt(len(x) / self.wordSize)
         return (self.alphabetize(paaX), indices)
 
     def normalize(self, x):
@@ -118,7 +120,7 @@ class SAX(object):
         mindist = 0.0
         for i in range(0, len(list_letters_a)):
             mindist += self.compare_letters(list_letters_a[i], list_letters_b[i])**2
-        mindist = np.sqrt(n/float(len(sA)))* np.sqrt(mindist)
+        mindist = self.scalingFactor* np.sqrt(mindist)
         return mindist
 
     def compare_letters(self, la, lb):
@@ -146,11 +148,13 @@ class SAX(object):
                     low_num = np.min([number_rep[i], number_rep[j]])
                     self.compareDict[letters[i]+letters[j]] = self.beta[high_num] - self.beta[low_num]
 
-    def sliding_window(self, x, windowSize = None, overlap = None):
-        if not windowSize:
-            windowSize = int(len(x)/20)
-        if not overlap:
-            overlap = windowSize*0.9
+    def sliding_window(self, x, numSubsequences = None, overlappingFraction = None):
+        if not numPieces:
+            numPieces = 20
+        windowSize = int(len(x)/numPieces)
+        if not overlappingFraction:
+            overlappingFraction = 0.9
+        overlap = windowSize*overlappingFraction
         moveSize = int(windowSize - overlap)
         if moveSize < 1:
             raise OverlapSpecifiedIsNotSmallerThanWindowSize()
@@ -165,3 +169,9 @@ class SAX(object):
             windowIndices.append((ptr, ptr+windowSize))
             ptr += moveSize
         return (stringRep,windowIndices)
+
+    def batch_compare(self, xStrings, refString):
+        return [self.compare_strings(x, refString) for x in xStrings]
+
+    def set_scaling_factor(self, scalingFactor):
+        self.scalingFactor = scalingFactor
