@@ -146,3 +146,22 @@ class SAX(object):
                     low_num = np.min([number_rep[i], number_rep[j]])
                     self.compareDict[letters[i]+letters[j]] = self.beta[high_num] - self.beta[low_num]
 
+    def sliding_window(self, x, windowSize = None, overlap = None):
+        if not windowSize:
+            windowSize = int(len(x)/20)
+        if not overlap:
+            overlap = windowSize*0.9
+        moveSize = int(windowSize - overlap)
+        if moveSize < 1:
+            raise OverlapSpecifiedIsNotSmallerThanWindowSize()
+        ptr = 0
+        n = len(x)
+        windowIndices = []
+        stringRep = []
+        while ptr < n-windowSize+1:
+            thisSubRange = x[ptr:ptr+windowSize]
+            (thisStringRep,indices) = self.to_letter_rep(thisSubRange)
+            stringRep.append(thisStringRep)
+            windowIndices.append((ptr, ptr+windowSize))
+            ptr += moveSize
+        return (stringRep,windowIndices)
