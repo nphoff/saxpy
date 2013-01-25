@@ -14,12 +14,7 @@ class SAX(object):
     """
 
     def __init__(self, wordSize = 8, alphabetSize = 7, epsilon = 1e-6):
-        ##TODO:
-        # Initialize the SAX object with the options.
-        # options to include:
-        # alphabet size (nLetters)
-        # epsilon (lower threshold for equality)
-        # initialize beta here too.
+
         if alphabetSize < 3 or alphabetSize > 20:
             raise DictionarySizeIsNotSupported()
         self.aOffset = ord('a')
@@ -149,24 +144,24 @@ class SAX(object):
                     self.compareDict[letters[i]+letters[j]] = self.beta[high_num] - self.beta[low_num]
 
     def sliding_window(self, x, numSubsequences = None, overlappingFraction = None):
-        if not numPieces:
-            numPieces = 20
-        windowSize = int(len(x)/numPieces)
+        if not numSubsequences:
+            numSubsequences = 20
+        self.windowSize = int(len(x)/numSubsequences)
         if not overlappingFraction:
             overlappingFraction = 0.9
-        overlap = windowSize*overlappingFraction
-        moveSize = int(windowSize - overlap)
+        overlap = self.windowSize*overlappingFraction
+        moveSize = int(self.windowSize - overlap)
         if moveSize < 1:
             raise OverlapSpecifiedIsNotSmallerThanWindowSize()
         ptr = 0
         n = len(x)
         windowIndices = []
         stringRep = []
-        while ptr < n-windowSize+1:
-            thisSubRange = x[ptr:ptr+windowSize]
+        while ptr < n-self.windowSize+1:
+            thisSubRange = x[ptr:ptr+self.windowSize]
             (thisStringRep,indices) = self.to_letter_rep(thisSubRange)
             stringRep.append(thisStringRep)
-            windowIndices.append((ptr, ptr+windowSize))
+            windowIndices.append((ptr, ptr+self.windowSize))
             ptr += moveSize
         return (stringRep,windowIndices)
 
@@ -175,3 +170,6 @@ class SAX(object):
 
     def set_scaling_factor(self, scalingFactor):
         self.scalingFactor = scalingFactor
+
+    def set_window_size(self, windowSize):
+        self.windowSize = windowSize
