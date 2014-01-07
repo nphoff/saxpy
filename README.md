@@ -46,4 +46,13 @@ If you haven't generated the strings through the same SAX object, the scaling
 factor (square root of the length of the input vector over the word size) will be
 incorrect, you can correct it using:
 
+```
 s.set_scaling_factor(scalingFactor)
+```
+
+*****
+To run the tests, just do:
+
+```
+nosetests ./tests/
+```
