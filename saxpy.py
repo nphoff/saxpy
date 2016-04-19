@@ -50,7 +50,7 @@ class SAX(object):
         Function takes a series of data, x, and transforms it to a string representation
         """
         (paaX, indices) = self.to_PAA(self.normalize(x))
-        self.scalingFactor = np.sqrt(len(x) / self.wordSize)
+        self.scalingFactor = np.sqrt((len(x) * 1.0) / (self.wordSize * 1.0))
         return (self.alphabetize(paaX), indices)
 
     def normalize(self, x):
