@@ -5,6 +5,11 @@ import numpy as np
 import math
 
 
+class DictionarySizeIsNotSupported(Exception): pass
+class StringsAreDifferentLength(Exception): pass
+class OverlapSpecifiedIsNotSmallerThanWindowSize(Exception): pass
+
+
 class SAX(object):
     """
     This class is for computing common things with the Symbolic
@@ -67,9 +72,9 @@ class SAX(object):
 
     def to_PAA(self, x):
         """
-        Funciton performs Piecewise Aggregate Approximation on data set, reducing
+        Function performs Piecewise Aggregate Approximation on data set, reducing
         the dimension of the dataset x to w discrete levels. returns the reduced
-        dimension data set, as well as the indicies corresponding to the original
+        dimension data set, as well as the indices corresponding to the original
         data for each reduced dimension
         """
         n = len(x)
