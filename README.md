@@ -40,6 +40,11 @@ x3x2ComparisonScores = s.batch_compare(x3,x2)
 ```
 
 *****
+*Missing data:*
+
+Missing data is supported.  Input values of `numpy.nan` will not affect normalization and will be converted to the `-` character during alphabetization. When comparing two strings containing the `-` character, the distance contribution for any such characters will be 0.
+
+*****
 *Note:*
 
 If you haven't generated the strings through the same SAX object, the scaling
