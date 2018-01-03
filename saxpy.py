@@ -66,9 +66,14 @@ class SAX(object):
         of the original array.
         """
         X = np.asanyarray(x)
-        if X.std() < self.eps:
-            return [0 for entry in X]
-        return (X-X.mean())/X.std()
+        if np.nanstd(X) < self.eps:
+            res = []
+            for entry in X:
+                if not np.isnan(entry):
+                    res.append(0)
+                else:
+                    res.append(np.nan)
+        return (X - np.nanmean(X)) / np.nanstd(X)
 
     def to_PAA(self, x):
         """
@@ -100,6 +105,10 @@ class SAX(object):
         for i in range(0, len(paaX)):
             letterFound = False
             for j in range(0, len(self.beta)):
+                if np.isnan(paaX[i]):
+                    alphabetizedX += '-'
+                    letterFound = True
+                    break
                 if paaX[i] < self.beta[j]:
                     alphabetizedX += chr(self.aOffset + j)
                     letterFound = True
@@ -119,7 +128,8 @@ class SAX(object):
         list_letters_b = [x for x in sB]
         mindist = 0.0
         for i in range(0, len(list_letters_a)):
-            mindist += self.compare_letters(list_letters_a[i], list_letters_b[i])**2
+            if list_letters_a[i] is not '-' and list_letters_b[i] is not '-':
+                mindist += self.compare_letters(list_letters_a[i], list_letters_b[i])**2
         mindist = self.scalingFactor* np.sqrt(mindist)
         return mindist
 
