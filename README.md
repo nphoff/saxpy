@@ -36,7 +36,7 @@ overlaps with the previous subsequence
 Then if you wanted to compare each subsequence to another string (say x2):
 
 ```
-x3x2ComparisonScores = s.batch_compare(x3,x2)
+x3x2ComparisonScores = s.batch_compare(x3Strings,x2String)
 ```
 
 *****
