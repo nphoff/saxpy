@@ -73,6 +73,7 @@ class SAX(object):
                     res.append(0)
                 else:
                     res.append(np.nan)
+            return res
         return (X - np.nanmean(X)) / np.nanstd(X)
 
     def to_PAA(self, x):
