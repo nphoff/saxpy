@@ -45,3 +45,6 @@ class TestSAX(object):
         complete_arr_res = self.sax.normalize([1,0,0,0,0,1])
         assert np.array_equal(incomplete_arr_res[:-1], complete_arr_res)
         assert np.isnan(incomplete_arr_res[-1])
+    def test_normalize_under_epsilon(self):
+        array_under_epsilon = self.sax.normalize([1e-7, 2e-7, 1.5e-7])
+        assert np.array_equal(array_under_epsilon, [0,0,0])
